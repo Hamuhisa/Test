@@ -3,73 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premier League Information</title>
+<title>Upcoming Football Matches</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+  table {
+    border-collapse: collapse;
+    width: 100%;
   }
-  h1 {
-    margin-bottom: 10px;
+  th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
   }
-  #leagueInfo {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 400px;
-  }
-  #error {
-    color: red;
-    font-weight: bold;
+  th {
+    background-color: #f2f2f2;
   }
 </style>
 </head>
 <body>
 
-<h1>Premier League Information</h1>
+<h1>Upcoming Football Matches</h1>
 
-<div id="leagueInfo"></div>
-<div id="error"></div>
+<table id="matchesTable">
+  <thead>
+    <tr>
+      <th>Home Team</th>
+      <th>Away Team</th>
+      <th>Date</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody id="matchesBody">
+    <!-- Matches will be inserted here -->
+  </tbody>
+</table>
 
 <script>
-  // Sportmonks API credentials
-  const apiToken = 'g2Ukf5aqiOMQQ7AQazkyFCWrPMxtMBTyFJ4ytEonbJpTFhQ0sDYxdjMMN3H9';
-  const baseUrl = 'https://api.sportmonks.com/v3/football/';
+  // Function to fetch upcoming football matches from football-data.org API
+  async function getUpcomingMatches() {
+    const apiKey = '90e5dae48e6d4c3295ebc16bef7c18c2'; // Replace with your football-data.org API key
+    const apiUrl = `https://api.football-data.org/v2/matches?status=SCHEDULED`;
 
-  // Function to fetch information about the Premier League
-  async function getLeagueInfo() {
-    const leagueId = 271; // Premier League ID
-    const url = `${baseUrl}leagues/${leagueId}?api_token=${apiToken}`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(apiUrl, {
+        headers: {
+          'X-Auth-Token': apiKey
+        }
+      });
+
       if (!response.ok) {
-        throw new Error('Network response was not ok.');
+        throw new Error('Failed to fetch upcoming matches');
       }
+
       const data = await response.json();
-      return data.data;
+      return data.matches;
     } catch (error) {
-      document.getElementById('error').textContent = 'Error fetching league information: ' + error.message;
+      console.error('Error fetching upcoming matches:', error);
+      return [];
     }
   }
 
-  // Function to display league information on the page
-  async function displayLeagueInfo() {
-    try {
-      const leagueInfo = await getLeagueInfo();
-      const leagueInfoDiv = document.getElementById('leagueInfo');
-      leagueInfoDiv.innerHTML = `
-        <h2>${leagueInfo.name}</h2>
-        <p><strong>Country:</strong> ${leagueInfo.country_name}</p>
-        <p><strong>Current Season:</strong> ${leagueInfo.current_season.name}</p>
-        <p><strong>Season Start Date:</strong> ${leagueInfo.current_season.start_date}</p>
-        <p><strong>Season End Date:</strong> ${leagueInfo.current_season.end_date}</p>
+  // Function to display matches in the table
+  function displayMatches(matches) {
+    const matchesBody = document.getElementById('matchesBody');
+    matchesBody.innerHTML = ''; // Clear previous matches
+
+    matches.forEach(match => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${match.homeTeam.name}</td>
+        <td>${match.awayTeam.name}</td>
+        <td>${match.utcDate.split('T')[0]}</td>
+        <td>${match.utcDate.split('T')[1].slice(0, 5)}</td>
       `;
-    } catch (error) {
-      console.error('Error displaying league information:', error);
-    }
+      matchesBody.appendChild(row);
+    });
   }
 
   // Main function
-  displayLeagueInfo();
+  async function main() {
+    const upcomingMatches = await getUpcomingMatches();
+    displayMatches(upcomingMatches);
+  }
+
+  main();
 </script>
 
 </body>
