@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin:0;
+    padding:0;
+}
+
+
+body {
+    background: url(img/bg.jpg) repeat 0 0;
+}
+p,a {
+        font-family: "Raleway", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+}
+
+h1 {
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+nav {
+    justify-content:space-between;
+    align-items: center;
+    display:flex;
+    padding:15px;
+    background-color:#fff;
+}
+nav ul {
+    display:flex;
+    list-style-type: none;   
+}
+nav li {
+    color: #000 !important;
+    text-decoration:none;
+    height:auto;
+    text-align:center;
+}
+
+nav li:hover {
+    background-color:#eecddf;
+}
+nav li a {
+    color: #000 !important;
+    text-decoration:none;
+    padding:14px;
+    font-size:22px;
+    white-space: nowrap;
+}
+
+nav li a:hover {
+    border:thin 1px black;
+}
+.logo h1 {
+    color:#1d56c2;
+    font-size:32px;
+}
+
+.icons img {
+    padding:15px;
+}
+
+.container {
+    margin:auto;
+    padding: 50px;
+    width:1000px;
+    height:auto;
+    border-radius:32px;
+    background-color:#fff;
+    overflow: hidden;
+}
+
+.container h1 {
+    padding-left:10px;
+    color:#1d56c2;
+}
+
+.heading {
+    padding-top:32px;
+    display:flex;
+    vertical-align:middle;
+    margin:auto;
+    width:100%;
+    justify-content: center;
+}
+
+.smallul {
+    color:#eecddf;
+    font-size:16px;
+    border-radius: 25px;
+    border: 3px solid #1d56c2;
+    padding: 20px;
+    text-align:center;
+    width:10em;
+    margin:auto;
+} 
+
+.smallul h1 {
+    text-align:center;
+}
+
+.smallul a {
+    text-decoration:none;
+}
+
+.Flexbox {
+    display:flex;
+}
+
+.grid-item {
+    margin:auto;
+    padding:20px;
+}
+
+.grid-item img {
+    border-radius: 40%;
+    box-shadow:
+  1.7px 1.7px 11px rgba(0, 0, 0, 0.07),
+  3.8px 4px 19.3px rgba(0, 0, 0, 0.052),
+  6.6px 6.9px 24.7px rgba(0, 0, 0, 0.044),
+  10.8px 11.3px 27.7px rgba(0, 0, 0, 0.038),
+  17.6px 18.5px 28.6px rgba(0, 0, 0, 0.032),
+  31.8px 33.4px 29.4px rgba(0, 0, 0, 0.026),
+  78px 82px 42px rgba(0, 0, 0, 0.018)
+;
+}
+
+.grid-item img:hover {
+    border-radius: 40%;
+    animation:bounce; /* referring directly to the animation's @keyframe declaration */
+    animation-duration: 1s;
+}
+
+
+

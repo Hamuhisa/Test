@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premier League Fixture Details</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<table id="fixtureDetails">
+  <tbody>
+    <!-- Table body will be populated by JavaScript -->
+  </tbody>
+</table>
+
+<script>
+  // Your Sportmonks API key
+  const apiKey = 'g2Ukf5aqiOMQQ7AQazkyFCWrPMxtMBTyFJ4ytEonbJpTFhQ0sDYxdjMMN3H9';
+
+  // Function to fetch fixture details
+  async function fetchFixtureDetails() {
+    try {
+      const response = await fetch(`https://api.sportmonks.com/v3/football/fixtures/18535517?api_token=${apiKey}&select=name`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return {};
+    }
+  }
+
+  // Function to display fixture details in the table
+  async function displayFixtureDetails() {
+    try {
+      const fixture = await fetchFixtureDetails();
+
+      const tableBody = document.querySelector('#fixtureDetails tbody');
+      tableBody.innerHTML = '';
+
+      // Display fixture details
+      for (const key in fixture) {
+        const row = document.createElement('tr');
+        const keyCell = document.createElement('td');
+        keyCell.textContent = key;
+        const valueCell = document.createElement('td');
+        valueCell.textContent = fixture[key];
+
+        row.appendChild(keyCell);
+        row.appendChild(valueCell);
+        
+        tableBody.appendChild(row);
+      }
+    } catch (error) {
+      console.error('Error displaying fixture details:', error);
+    }
+  }
+
+  // Call the function to display fixture details when the page loads
+  displayFixtureDetails();
+</script>
+
+</body>
+</html>
