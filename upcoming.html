@@ -1,80 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Premier League Fixture Details</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upcoming Football Matches</title>
+<link rel="stylesheet" href="C:\Users\lucas\Desktop\SWE\Betting clone\style.css">
 </head>
 <body>
+    <nav>
 
-<table id="fixtureDetails">
-  <tbody>
-    <!-- Table body will be populated by JavaScript -->
-  </tbody>
-</table>
+        <ul class="logo">
+            <li><h1>Lucas</h1></li>
+        </ul>
+        <ul class="centerul">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="upcoming.html">Scheduled</a></li>
+            <li><a href="index.html">Stats</a></li>
+        </ul>
+        <ul class="icons">
+            <li><img src="C:\Users\lucas\Desktop\SWE\Betting clone\img\github.svg"></li>
+            <li><img src="C:\Users\lucas\Desktop\SWE\Betting clone\img\instagram.svg"></li>
+            <li><img src="C:\Users\lucas\Desktop\SWE\Betting clone\img\linkedin.svg"></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <!-- Add select element for timezone -->
+<select id="timezoneSelect">
+    <option value="UTC">UTC</option>
+    <option value="Australia/Sydney">Australia (Sydney)</option>
+    <option value="America/Sao_Paulo">South America (São Paulo)</option>
+    <option value="Asia/Tokyo">Asia (Tokyo)</option>
+    <option value="America/New_York">United States (Eastern Time)</option>
+    <option value="America/Los_Angeles">United States (Pacific Time)</option>
+    <option value="Europe/London">United Kingdom (London)</option>
+    <option value="Europe/Berlin">Europe (Berlin)</option>
+    <!-- Add more timezone options as needed -->
+  </select>
+<div id="matchesByLeague"></div>
+
 
 <script>
-  // Your Sportmonks API key
-  const apiKey = 'g2Ukf5aqiOMQQ7AQazkyFCWrPMxtMBTyFJ4ytEonbJpTFhQ0sDYxdjMMN3H9';
+  // Function to fetch upcoming football matches from football-data.org API
+  async function getUpcomingMatches() {
+    const apiKey = '90e5dae48e6d4c3295ebc16bef7c18c2'; // Replace with your football-data.org API key
+    const apiUrl = `https://api.football-data.org/v2/matches?status=SCHEDULED`;
 
-  // Function to fetch fixture details
-  async function fetchFixtureDetails() {
     try {
-      const response = await fetch(`https://api.sportmonks.com/v3/football/fixtures/18535517?api_token=${apiKey}&select=name`);
+      const response = await fetch(apiUrl, {
+        headers: {
+          'X-Auth-Token': apiKey
+        }
+      });
+
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error('Failed to fetch upcoming matches');
       }
+
       const data = await response.json();
-      return data;
+      return data.matches;
     } catch (error) {
-      console.error('Error fetching data:', error);
-      return {};
+      console.error('Error fetching upcoming matches:', error);
+      return [];
     }
   }
 
-  // Function to display fixture details in the table
-  async function displayFixtureDetails() {
-    try {
-      const fixture = await fetchFixtureDetails();
+  // Function to group matches by league
+  function groupMatchesByLeague(matches) {
+    const matchesByLeague = {};
 
-      const tableBody = document.querySelector('#fixtureDetails tbody');
-      tableBody.innerHTML = '';
-
-      // Display fixture details
-      for (const key in fixture) {
-        const row = document.createElement('tr');
-        const keyCell = document.createElement('td');
-        keyCell.textContent = key;
-        const valueCell = document.createElement('td');
-        valueCell.textContent = fixture[key];
-
-        row.appendChild(keyCell);
-        row.appendChild(valueCell);
-        
-        tableBody.appendChild(row);
+    matches.forEach(match => {
+      const leagueName = match.competition.name;
+      if (!matchesByLeague[leagueName]) {
+        matchesByLeague[leagueName] = [];
       }
-    } catch (error) {
-      console.error('Error displaying fixture details:', error);
+      matchesByLeague[leagueName].push(match);
+    });
+
+    return matchesByLeague;
+  }
+
+  // Function to display matches by league
+  function displayMatchesByLeague(matchesByLeague) {
+    const matchesByLeagueDiv = document.getElementById('matchesByLeague');
+
+    for (const leagueName in matchesByLeague) {
+      if (matchesByLeague.hasOwnProperty(leagueName)) {
+        const matches = matchesByLeague[leagueName];
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <caption>${leagueName}</caption>
+          <thead>
+            <tr>
+              <th>Home Team</th>
+              <th>Away Team</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="matchesBody_${leagueName}">
+            <!-- Matches will be inserted here -->
+          </tbody>
+        `;
+        matchesByLeagueDiv.appendChild(table);
+
+        const matchesBody = document.getElementById(`matchesBody_${leagueName}`);
+        matches.forEach(match => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${match.homeTeam.name}</td>
+            <td>${match.awayTeam.name}</td>
+            <td>${match.utcDate.split('T')[0]}</td>
+            <td>${convertToLocalTime(match.utcDate)}</td>
+          `;
+          matchesBody.appendChild(row);
+        });
+      }
     }
   }
 
-  // Call the function to display fixture details when the page loads
-  displayFixtureDetails();
+  // Function to convert UTC time to local time based on selected timezone
+  function convertToLocalTime(utcDateTime) {
+    const selectedTimezone = document.getElementById('timezoneSelect').value;
+    const localDateTime = new Date(utcDateTime);
+    const options = { timeZone: selectedTimezone, hour12: false };
+    return localDateTime.toLocaleTimeString('en-US', options);
+  }
+
+  // Function to update match times when timezone is changed
+  function updateTimezone() {
+    const matchesByLeagueDiv = document.getElementById('matchesByLeague');
+    matchesByLeagueDiv.innerHTML = ''; // Clear previous matches
+    main(); // Re-fetch and display matches
+  }
+
+  // Event listener for timezone select
+  document.getElementById('timezoneSelect').addEventListener('change', updateTimezone);
+
+  // Main function
+  async function main() {
+    const upcomingMatches = await getUpcomingMatches();
+    const matchesByLeague = groupMatchesByLeague(upcomingMatches);
+    displayMatchesByLeague(matchesByLeague);
+  }
+
+  main();
+  
 </script>
+</div>
 
 </body>
 </html>
