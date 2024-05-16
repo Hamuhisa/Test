@@ -24,21 +24,22 @@ h1 {
 }
 nav {
     justify-content:space-between;
-    align-items: center;
     display:flex;
+    margin:auto;
     padding:15px;
     background-color:#fff;
     border-bottom: 3px solid #1d56c2;
 }
+
 nav ul {
     display:flex;
-    list-style-type: none;   
+    list-style-type: none; 
+
 }
 nav li {
     color: #000 !important;
     text-decoration:none;
-    height:auto;
-    text-align:center;
+    margin:auto;
 }
 
 nav li a {
@@ -46,26 +47,31 @@ nav li a {
     text-decoration:none;
     padding:14px;
     font-size:22px;
-    white-space: nowrap;
 }
 
 nav li a:hover {
     border:thin 1px black;
 }
-.logo h1 {
+.leftNav {
+    display:flex;
+}
+.leftNav h1 {
     color:#1d56c2;
     font-size:48px;
 }
 
-.icons img {
-    padding:7px;
+
+.centerNav {
+    margin:auto;
+    text-align: center;    
+    display:flex;
 }
 
 .container {
     margin:auto;
     padding: 50px;
     width:1000px;
-    border-radius:32px;
+    border-radius:8px;
     background-color:#fff;
     overflow: hidden;
     box-shadow: 10px 10px 58px -2px rgba(0,0,0,0.27);
@@ -99,10 +105,6 @@ nav li a:hover {
 
 .smallul a {
     text-decoration:none;
-}
-
-.centerul {
-    display:flex;
 }
 
 .Flexbox {
