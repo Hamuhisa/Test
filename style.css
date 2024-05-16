@@ -79,14 +79,27 @@ nav li a:hover {
     -moz-box-shadow: 10px 10px 58px -2px rgba(0,0,0,0.27);
 }
 
+.avatar img {
+    margin:auto;
+    display:flex;
+}
+
+
 .container h1 {
-    padding-left:10px;
     color:#1d56c2;
+    margin-top:50px;
+    margin-bottom:50px;
 }
 
 .heading {
     align-items: left;
 }
+
+
+.aboutMe p {
+    line-height:1.3;
+}
+
 
 .smallul {
     color:#eecddf;
@@ -158,6 +171,7 @@ caption {
 }
 
 #timezoneSelect {
+    margin-top:50px;
     line-height:15px;
     padding:1em;
     border: 2px solid #000;
