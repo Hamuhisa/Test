@@ -94,7 +94,7 @@ nav li a:hover {
 }
 
 
-.aboutMe p {
+.containerText p {
     line-height:1.3;
 }
 
@@ -120,7 +120,7 @@ table {
     width:90em;
     border-radius:5px;
   }
-  
+
   th {
     background-color: #f2f2f2;
   }
