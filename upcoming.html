@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcoming Football Matches</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Football Matches</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
-
         <ul class="leftNav">
             <li><h1>Lucas</h1></li>
         </ul>
@@ -17,145 +16,139 @@
             <li><a href="upcoming.html">API Project</a></li>
         </ul>
         <ul class="rightNav">
-            <li><a href="https://github.com/Hamuhisa"><img src="img/github.svg"></li></a>
-            <li><a href="https://www.linkedin.com/in/lucas-irusta-b56619208/"><img src="img/linkedin.svg"></li></a>
+            <li><a href="https://github.com/Hamuhisa"><img src="img/github.svg" alt="GitHub"></a></li>
+            <li><a href="https://www.linkedin.com/in/lucas-irusta-b56619208/"><img src="img/linkedin.svg" alt="LinkedIn"></a></li>
         </ul>
     </nav>
     <div class="container">
-
-      <div class="containerText">
-      <h1> Fottball API Project </h1>
-    <p>
-      I'm excited to showcase my latest project, a football schedule application crafted with precision and powered by the Football Data API. Using JavaScript, HTML, and CSS, I've built an intuitive platform designed for football fans. JavaScript makes the app interactive, HTML structures the content, and CSS ensures it looks polished.
-    </p>
-
-    <h1> Future Plans </h1>
-    <p> To further improve the user experience with this project i will be working on displaying Livescores & Betting Odds.</p>
-  </div>
+        <div class="containerText">
+            <h1>Football API Project</h1>
+            <p>I'm excited to showcase my latest project, a football schedule application crafted with precision and powered by the Football Data API. Using JavaScript, HTML, and CSS, I've built an intuitive platform designed for football fans. JavaScript makes the app interactive, HTML structures the content, and CSS ensures it looks polished.</p>
+            <h1>Future Plans</h1>
+            <p>To further improve the user experience with this project, I will be working on displaying Livescores & Betting Odds.</p>
+        </div>
+        
         <!-- Add select element for timezone -->
-<select id="timezoneSelect">
-    <option value="UTC">UTC</option>
-    <option value="Australia/Sydney">Australia (Sydney)</option>
-    <option value="America/Sao_Paulo">South America (São Paulo)</option>
-    <option value="Asia/Tokyo">Asia (Tokyo)</option>
-    <option value="America/New_York">United States (Eastern Time)</option>
-    <option value="America/Los_Angeles">United States (Pacific Time)</option>
-    <option value="Europe/London">United Kingdom (London)</option>
-    <option value="Europe/Berlin">Europe (Berlin)</option>
-    <!-- Add more timezone options as needed -->
-  </select>
-  
-<div id="matchesByLeague"></div>
+        <select id="timezoneSelect">
+            <option value="UTC">UTC</option>
+            <option value="Australia/Sydney">Australia (Sydney)</option>
+            <option value="America/Sao_Paulo">South America (São Paulo)</option>
+            <option value="Asia/Tokyo">Asia (Tokyo)</option>
+            <option value="America/New_York">United States (Eastern Time)</option>
+            <option value="America/Los_Angeles">United States (Pacific Time)</option>
+            <option value="Europe/London">United Kingdom (London)</option>
+            <option value="Europe/Berlin">Europe (Berlin)</option>
+            <!-- Add more timezone options as needed -->
+        </select>
+        
+        <div id="matchesByLeague"></div>
 
+        <script>
+            // Function to fetch upcoming football matches from football-data.org API
+            async function getUpcomingMatches() {
+                const apiKey = '90e5dae48e6d4c3295ebc16bef7c18c2'; // Replace with your football-data.org API key
+                const apiUrl = `https://api.football-data.org/v2/matches?status=SCHEDULED`;
 
-<script>
-  // Function to fetch upcoming football matches from football-data.org API
-  async function getUpcomingMatches() {
-    const apiKey = '90e5dae48e6d4c3295ebc16bef7c18c2'; // Replace with your football-data.org API key
-    const apiUrl = `https://api.football-data.org/v2/matches?status=SCHEDULED`;
+                try {
+                    const response = await fetch(apiUrl, {
+                        headers: {
+                            'X-Auth-Token': apiKey
+                        }
+                    });
 
-    try {
-      const response = await fetch(apiUrl, {
-        headers: {
-          'X-Auth-Token': apiKey
-        }
-      });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch upcoming matches');
+                    }
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch upcoming matches');
-      }
+                    const data = await response.json();
+                    return data.matches;
+                } catch (error) {
+                    console.error('Error fetching upcoming matches:', error);
+                    return [];
+                }
+            }
 
-      const data = await response.json();
-      return data.matches;
-    } catch (error) {
-      console.error('Error fetching upcoming matches:', error);
-      return [];
-    }
-  }
+            // Function to group matches by league
+            function groupMatchesByLeague(matches) {
+                const matchesByLeague = {};
 
-  // Function to group matches by league
-  function groupMatchesByLeague(matches) {
-    const matchesByLeague = {};
+                matches.forEach(match => {
+                    const leagueName = match.competition.name;
+                    if (!matchesByLeague[leagueName]) {
+                        matchesByLeague[leagueName] = [];
+                    }
+                    matchesByLeague[leagueName].push(match);
+                });
 
-    matches.forEach(match => {
-      const leagueName = match.competition.name;
-      if (!matchesByLeague[leagueName]) {
-        matchesByLeague[leagueName] = [];
-      }
-      matchesByLeague[leagueName].push(match);
-    });
+                return matchesByLeague;
+            }
 
-    return matchesByLeague;
-  }
+            // Function to display matches by league
+            function displayMatchesByLeague(matchesByLeague) {
+                const matchesByLeagueDiv = document.getElementById('matchesByLeague');
 
-  // Function to display matches by league
-  function displayMatchesByLeague(matchesByLeague) {
-    const matchesByLeagueDiv = document.getElementById('matchesByLeague');
+                for (const leagueName in matchesByLeague) {
+                    if (matchesByLeague.hasOwnProperty(leagueName)) {
+                        const matches = matchesByLeague[leagueName];
+                        const table = document.createElement('table');
+                        table.innerHTML = `
+                            <caption>${leagueName}</caption>
+                            <thead>
+                                <tr>
+                                    <th>Home Team</th>
+                                    <th>Away Team</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matchesBody_${leagueName}">
+                                <!-- Matches will be inserted here -->
+                            </tbody>
+                        `;
+                        matchesByLeagueDiv.appendChild(table);
 
-    for (const leagueName in matchesByLeague) {
-      if (matchesByLeague.hasOwnProperty(leagueName)) {
-        const matches = matchesByLeague[leagueName];
-        const table = document.createElement('table');
-        table.innerHTML = `
-          <caption>${leagueName}</caption>
-          <thead>
-            <tr>
-              <th>Home Team</th>
-              <th>Away Team</th>
-              <th>Date</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody id="matchesBody_${leagueName}">
-            <!-- Matches will be inserted here -->
-          </tbody>
-        `;
-        matchesByLeagueDiv.appendChild(table);
+                        const matchesBody = document.getElementById(`matchesBody_${leagueName}`);
+                        matches.forEach(match => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${match.homeTeam.name}</td>
+                                <td>${match.awayTeam.name}</td>
+                                <td>${match.utcDate.split('T')[0]}</td>
+                                <td>${convertToLocalTime(match.utcDate)}</td>
+                            `;
+                            matchesBody.appendChild(row);
+                        });
+                    }
+                }
+            }
 
-        const matchesBody = document.getElementById(`matchesBody_${leagueName}`);
-        matches.forEach(match => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${match.homeTeam.name}</td>
-            <td>${match.awayTeam.name}</td>
-            <td>${match.utcDate.split('T')[0]}</td>
-            <td>${convertToLocalTime(match.utcDate)}</td>
-          `;
-          matchesBody.appendChild(row);
-        });
-      }
-    }
-  }
+            // Function to convert UTC time to local time based on selected timezone
+            function convertToLocalTime(utcDateTime) {
+                const selectedTimezone = document.getElementById('timezoneSelect').value;
+                const localDateTime = new Date(utcDateTime);
+                const options = { timeZone: selectedTimezone, hour12: false };
+                return localDateTime.toLocaleTimeString('en-US', options);
+            }
 
-  // Function to convert UTC time to local time based on selected timezone
-  function convertToLocalTime(utcDateTime) {
-    const selectedTimezone = document.getElementById('timezoneSelect').value;
-    const localDateTime = new Date(utcDateTime);
-    const options = { timeZone: selectedTimezone, hour12: false };
-    return localDateTime.toLocaleTimeString('en-US', options);
-  }
+            // Function to update match times when timezone is changed
+            function updateTimezone() {
+                const matchesByLeagueDiv = document.getElementById('matchesByLeague');
+                matchesByLeagueDiv.innerHTML = ''; // Clear previous matches
+                main(); // Re-fetch and display matches
+            }
 
-  // Function to update match times when timezone is changed
-  function updateTimezone() {
-    const matchesByLeagueDiv = document.getElementById('matchesByLeague');
-    matchesByLeagueDiv.innerHTML = ''; // Clear previous matches
-    main(); // Re-fetch and display matches
-  }
+            // Event listener for timezone select
+            document.getElementById('timezoneSelect').addEventListener('change', updateTimezone);
 
-  // Event listener for timezone select
-  document.getElementById('timezoneSelect').addEventListener('change', updateTimezone);
+            // Main function
+            async function main() {
+                const upcomingMatches = await getUpcomingMatches();
+                const matchesByLeague = groupMatchesByLeague(upcomingMatches);
+                displayMatchesByLeague(matchesByLeague);
+            }
 
-  // Main function
-  async function main() {
-    const upcomingMatches = await getUpcomingMatches();
-    const matchesByLeague = groupMatchesByLeague(upcomingMatches);
-    displayMatchesByLeague(matchesByLeague);
-  }
-
-  main();
-  
-</script>
-</div>
-
+            main();
+        </script>
+    </div>
 </body>
 </html>
