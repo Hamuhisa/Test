@@ -58,7 +58,11 @@ nav li a:hover {
 }
 
 .icons img {
-    padding:15px;
+    padding:7px;
+}
+
+.icons {
+justify-content:space-between;
 }
 
 .container {
