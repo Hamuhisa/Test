@@ -6,11 +6,11 @@
     padding:0;
 }
 
-
 body {
     overflow-y: scroll;
     background-color: #f3ecde9d;
 }
+
 p,a {
         font-family: "Raleway", sans-serif;
         font-optical-sizing: auto;
@@ -60,7 +60,6 @@ nav li a:hover {
     font-size:48px;
 }
 
-
 .centerNav {
     margin:auto;
     text-align: center;    
@@ -84,7 +83,6 @@ nav li a:hover {
     display:flex;
 }
 
-
 .container h1 {
     color:#1d56c2;
     margin-top:50px;
@@ -98,43 +96,6 @@ nav li a:hover {
 
 .aboutMe p {
     line-height:1.3;
-}
-
-
-.smallul {
-    color:#eecddf;
-    font-size:16px;
-    border-radius: 25px;
-    border: 3px solid #1d56c2;
-    padding: 20px;
-    text-align:center;
-    width:10em;
-    margin:auto;
-} 
-
-.smallul h1 {
-    text-align:center;
-}
-
-.smallul a {
-    text-decoration:none;
-}
-
-.Flexbox {
-    display:flex;
-    justify-content: space-around;
-}
-
-.grid-item {
-    padding:20px;
-    border: 3px solid #1d56c2;
-    border-radius:10px;
-}
-
-.grid-item img:hover {
-    border-radius: 40%;
-    animation:bounce; /* referring directly to the animation's @keyframe declaration */
-    animation-duration: 1s;
 }
 
 table {
@@ -151,6 +112,7 @@ table {
     border-radius: 8px;
     border: 3px solid black;
   }
+
   th, td {
     border: 1px solid #dddddd;
     text-align: left;
@@ -158,6 +120,7 @@ table {
     width:90em;
     border-radius:5px;
   }
+  
   th {
     background-color: #f2f2f2;
   }
