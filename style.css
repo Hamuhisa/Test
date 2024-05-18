@@ -143,3 +143,8 @@ caption {
     padding:50px;
 }
 
+.avatar img:hover {
+    transition: transform 1s;
+    transform: rotate(360deg);
+    transition: all 1s;
+}
